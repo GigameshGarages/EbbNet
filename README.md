@@ -3,7 +3,8 @@ Decentralised Dynamic Stream of Money Minted over Matic Network
 
 # Introduction
 - Money streaming represents the idea of continuous payments over a finite period of time. 
-- Block Numbers indexed by Verified Delay Functions (VDF) are used as a proxy of time to continuously update balances.
+- Block Numbers are used as a proxy of time to continuously update balances.
+- Block Numbers are indexed by On-chain randomness produced by verified delay functions
 
 # Workflow
 
