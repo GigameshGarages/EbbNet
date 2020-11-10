@@ -7,7 +7,16 @@ pragma solidity >=0.4.22 <0.7.0;
 * discussions-to: https://github.com/ethereum/EIPs/issues/1620
  */
  
+ import "github.com/starkware-libs/veedo/blob/master/contracts/BeaconContract.sol";
+
+contract Beacon{
+    function getLatestRandomness()external view returns(uint256,bytes32){}
+    
+}
+ 
 contract Ebb {
+
+    address public BeaconContractAddress=0x79474439753C7c70011C3b00e06e559378bAD040;
 
     struct Stream {
     address sender;
