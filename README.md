@@ -38,5 +38,10 @@ This standardised interface aims to change the way we think about long-term fina
 
 Block times are a reasonable, trustless proxy for time on the blockchain. Between 2016 and 2018, the Ethereum block time average value hovered around 14 seconds, excluding the last two quarters of 2017. Mathematically speaking, it would be ideal to have a standard deviation as close to 0 as possible, but that is not how things work in the real world.
 
-# Optimisations
+# Implementation
 
+- Integrating VDF into the ERC 1620 Time Functions
+- Integrating Dispute Verified Oracles into ERC 1620
+- Integrating ERC 1671 with ERC 1620
+- Deploying ERC 1620 into Matic Network
+- Deploying ERC 1671 into Matic Network
