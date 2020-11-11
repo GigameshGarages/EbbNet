@@ -1,5 +1,5 @@
 # Title
-Decentralised Dynamic Stream of Money Minted over Matic Network
+Decentralised Dynamic Stream of Money with Continous Markets over Matic Network
 
 # Introduction
 - Money streaming represents the idea of continuous payments over a finite period of time. 
