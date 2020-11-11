@@ -45,3 +45,8 @@ Block times are a reasonable, trustless proxy for time on the blockchain. Betwee
 - Integrating ERC 1671 with ERC 1620
 - Deploying ERC 1620 into Matic Network
 - Deploying ERC 1671 into Matic Network
+
+# References
+
+- EIP 1671 https://github.com/ethereum/EIPs/issues/1671
+- EIP 1620 https://github.com/ethereum/eips/issues/1620
