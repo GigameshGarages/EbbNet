@@ -16,6 +16,8 @@ Decentralised Dynamic Stream of Money Minted over Matic Network
 - The stream can be stopped at any point in time by any party without on-chain consensus.
 - If the stream period ended and it was not previously stopped by any party, the payee is entitled to withdraw all the deposited funds.
 
+file:///Users/gokulalex/Desktop/Screen%20Shot%202020-11-11%20at%2012.37.35%20PM.png
+
 # Motivation
 
 This standardised interface aims to change the way we think about long-term financial commitments. Thanks to blockchains, payments need not be sent in chunks (e.g. monthly salaries), as there is much less overhead in paying-as-you-go. Money as a function of time would better align incentives in a host of scenarios.
