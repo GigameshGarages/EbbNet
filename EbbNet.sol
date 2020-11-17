@@ -12,6 +12,8 @@ contract Beacon{
 
 contract EbbNet is IERC1620 {
     using SafeMath for uint256;
+    
+    address public BeaconContractAddress=0x79474439753C7c70011C3b00e06e559378bAD040;
 
     /**
      * Types
