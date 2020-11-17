@@ -1,5 +1,5 @@
 
-contract Ebb is IERC1620 {
+contract EbbNet is IERC1620 {
     using SafeMath for uint256;
 
     /**
