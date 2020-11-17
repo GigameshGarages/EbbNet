@@ -16,7 +16,7 @@ Decentralised Dynamic Stream of Money with Continous Markets over Matic Network
 - The stream can be stopped at any point in time by any party without on-chain consensus.
 - If the stream period ended and it was not previously stopped by any party, the payee is entitled to withdraw all the deposited funds.
 
-<img src="https://github.com/FusionLedger/EbbNet/blob/main/EbbNet_SystemContext.png" alt="EbbNet System Context"/>
+<img src="https://github.com/FusionLedger/EbbNet/diagrams/EbbNet_SystemContext.png" alt="EbbNet System Context"/>
 
 # Motivation
 
