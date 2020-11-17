@@ -1,4 +1,14 @@
 
+import "./SafeMath.sol";
+import "./IERC1620.sol";
+
+import "github.com/starkware-libs/veedo/blob/master/contracts/BeaconContract.sol";
+
+contract Beacon{
+    function getLatestRandomness()external view returns(uint256,bytes32){}
+    
+}
+
 contract EbbNet is IERC1620 {
     using SafeMath for uint256;
 
