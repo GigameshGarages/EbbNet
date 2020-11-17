@@ -14,6 +14,18 @@ contract EbbNet is IERC1620 {
     using SafeMath for uint256;
     
     address public BeaconContractAddress=0x79474439753C7c70011C3b00e06e559378bAD040;
+    
+    function setBeaconContractAddress(address _address) public  {
+        BeaconContractAddress=_address;
+    }
+    
+    function generateRandomNumber() public view returns(bytes32){
+        uint blockNumber;
+        bytes32 randomNumber;
+        Beacon beacon=Beacon(BeaconContractAddress);
+        (blockNumber,randomNumber)=beacon.getLatestRandomness();
+        return randomNumber;
+    }
 
     /**
      * Types
