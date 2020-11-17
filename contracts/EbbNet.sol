@@ -3,7 +3,7 @@ import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IERC1620.sol";
 
-import "@github.com/starkware-libs/veedo/blob/master/contracts/IBeaconContract.sol";
+import "github.com/starkware-libs/veedo/blob/master/contracts/IBeaconContract.sol";
 
 contract Beacon{
     function getLatestRandomness()external view returns(uint256,bytes32){}
