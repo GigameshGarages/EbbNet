@@ -78,10 +78,10 @@ function App() {
           href="https://ethereum.org/developers/#getting-started"
           style={{ marginTop: "8px" }}
         >
-          Learn Ethereum
+          Money Streams
         </Link>
-        <Link href="https://reactjs.org">Learn React</Link>
-        <Link href="https://thegraph.com/docs/quick-start" >Learn The Graph</Link>
+        <Link href="https://reactjs.org">Money Markets</Link>
+        <Link href="https://thegraph.com/docs/quick-start" >Money Graphs</Link>
       </Body>
     </div>
   );
