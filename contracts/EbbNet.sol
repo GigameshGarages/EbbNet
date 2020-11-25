@@ -29,6 +29,13 @@ contract EbbNet is IERC1620 {
     /**
      * Types
      */
+     
+    struct TimeLock {
+        bytes32 randomBits;
+        uint256 randomCounts;
+    } 
+     
+     
     struct Timeframe {
         uint256 start;
         uint256 stop;
