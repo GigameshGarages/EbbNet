@@ -18,7 +18,7 @@ contract EbbNet is IERC1620 {
         BeaconContractAddress=_address;
     }
     
-    function generateRandomNumber() public view returns(bytes32){
+    function generateRandomNumber() public view returns(uint256){
         uint blockNumber;
         bytes32 randomNumber;
         Beacon beacon=Beacon(BeaconContractAddress);
@@ -161,7 +161,7 @@ contract EbbNet is IERC1620 {
         streamNonce = 1;
     }
     
-    (, streamNonce) =  generateRandomNumber();
+    streamNonce =  generateRandomNumber();
 
     function balanceOf(uint256 _streamId, address _addr)
     public
