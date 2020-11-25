@@ -1,38 +1,36 @@
-
 import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IERC1620.sol";
-import "./IBeaconContract.sol";
 
+contract streamBeacon{
+    function getLatestRandomness()external view returns(uint256,bytes32){}
+    
+}
 
 contract EbbNet is IERC1620 {
     using SafeMath for uint256;
     
-    address public BeaconContractAddress=0x79474439753C7c70011C3b00e06e559378bAD040;
+    address public BeaconContractAddress = 0x79474439753C7c70011C3b00e06e559378bAD040;
     
     function setBeaconContractAddress(address _address) public  {
         BeaconContractAddress=_address;
     }
-   
     
-   function generateRandomNumber() public view returns (uint) {
-       uint256 randomNumber;
-       Beacon beacon = Beacon(BeaconContractAddress);
-       (block.number,randomNumber) = beacon.getLatestRandomness();
-       return uint(randomNumber);       
-   }
+    function generateRandomNumber() public view returns(bytes32){
+        uint blockNumber;
+        bytes32 randomNumber;
+        streamBeacon beacon=streamBeacon(BeaconContractAddress);
+        (blockNumber,randomNumber) = beacon.getLatestRandomness();
+        return randomNumber;
+       
+    }
    
     
 
     /**
      * Types
      */
-     
-    struct RandLock {
-        bytes32 smallLock;
-        uint256 bigLock;
-    } 
-     
+    
      
     struct Timeframe {
         uint256 start;
@@ -49,7 +47,6 @@ contract EbbNet is IERC1620 {
         address recipient;
         address tokenAddress;
         Timeframe timeframe;
-        RandLock randlock;
         Rate rate;
         uint256 balance;
     }
@@ -158,7 +155,9 @@ contract EbbNet is IERC1620 {
     constructor() public {
         streamNonce = 1;
     }
+    
    
+
     function balanceOf(uint256 _streamId, address _addr)
     public
     view
@@ -205,8 +204,6 @@ contract EbbNet is IERC1620 {
             stream.balance,
             stream.timeframe.start,
             stream.timeframe.stop,
-            stream.randlock.smallLock,
-            stream.randlock.bigLock,
             stream.rate.payment,
             stream.rate.interval
         );
@@ -247,7 +244,7 @@ contract EbbNet is IERC1620 {
         require(allowance >= deposit, "contract not allowed to transfer enough tokens");
 
         // create and log the stream if the deposit is okay
-        streams[randomNumber] = Stream({
+        streams[streamNonce] = Stream({
             balance : deposit,
             sender : _sender,
             recipient : _recipient,
@@ -266,7 +263,10 @@ contract EbbNet is IERC1620 {
             _interval,
             deposit
         );
+        
+        if ((bytes32(block.number))> generateRandomNumber()){
         streamNonce = streamNonce.add(1);
+        }
 
         // apply Checks-Effects-Interactions
         require(tokenContract.transferFrom(_sender, address(this), deposit), "initial deposit failed");
