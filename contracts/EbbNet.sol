@@ -249,7 +249,7 @@ contract EbbNet is IERC1620 {
         require(allowance >= deposit, "contract not allowed to transfer enough tokens");
 
         // create and log the stream if the deposit is okay
-        streams[streamNonce] = Stream({
+        streams[randomNumber] = Stream({
             balance : deposit,
             sender : _sender,
             recipient : _recipient,
