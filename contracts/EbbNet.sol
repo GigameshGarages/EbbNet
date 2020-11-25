@@ -30,9 +30,9 @@ contract EbbNet is IERC1620 {
      * Types
      */
      
-    struct TimeLock {
-        bytes32 StreamLock;
-        uint256 StreamTrigger;
+    struct RandLock {
+        bytes32 smallLock;
+        uint256 bigLock;
     } 
      
      
@@ -51,7 +51,7 @@ contract EbbNet is IERC1620 {
         address recipient;
         address tokenAddress;
         Timeframe timeframe;
-        TimeLock timelock;
+        RandLock randlock;
         Rate rate;
         uint256 balance;
     }
@@ -207,6 +207,8 @@ contract EbbNet is IERC1620 {
             stream.balance,
             stream.timeframe.start,
             stream.timeframe.stop,
+            stream.randlock.smallLock,
+            stream.randlock.bigLock,
             stream.rate.payment,
             stream.rate.interval
         );
@@ -252,7 +254,6 @@ contract EbbNet is IERC1620 {
             sender : _sender,
             recipient : _recipient,
             tokenAddress : _tokenAddress,
-            randomness : generateRandomNumber(),
             timeframe : Timeframe(_startBlock, _stopBlock),
             rate : Rate(_payment, _interval)
         });
