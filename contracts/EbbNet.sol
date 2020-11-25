@@ -4,10 +4,6 @@ import "./IERC20.sol";
 import "./IERC1620.sol";
 import "./IBeaconContract.sol";
 
-contract Beacon{
-    function getLatestRandomness()external view returns(uint256,bytes32){}
-    
-}
 
 contract EbbNet is IERC1620 {
     using SafeMath for uint256;
@@ -17,6 +13,16 @@ contract EbbNet is IERC1620 {
     function setBeaconContractAddress(address _address) public  {
         BeaconContractAddress=_address;
     }
+   
+    
+   function generateRandomNumber() public view returns (uint) {
+       uint blockNumber;
+       bytes32 randomNumber;
+       Beacon beacon = Beacon(BeaconContractAddress);
+       (blockNumber,randomNumber) = beacon.getLatestRandomness();
+       return uint(randomNumber);       
+   }
+   
     
 
     /**
@@ -154,8 +160,7 @@ contract EbbNet is IERC1620 {
         streamNonce = 1;
     }
     
-    Beacon beacon=Beacon(BeaconContractAddress);
-    streamNonce =  beacon.getLatestRandomness();
+    streamNonce =  randomNumber;
 
     function balanceOf(uint256 _streamId, address _addr)
     public
