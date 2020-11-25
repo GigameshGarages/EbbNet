@@ -158,9 +158,7 @@ contract EbbNet is IERC1620 {
     constructor() public {
         streamNonce = 1;
     }
-    
-    streamNonce =  randomNumber;
-
+   
     function balanceOf(uint256 _streamId, address _addr)
     public
     view
