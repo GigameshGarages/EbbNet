@@ -16,10 +16,9 @@ contract EbbNet is IERC1620 {
    
     
    function generateRandomNumber() public view returns (uint) {
-       uint blockNumber;
-       bytes32 randomNumber;
+       uint256 randomNumber;
        Beacon beacon = Beacon(BeaconContractAddress);
-       (blockNumber,randomNumber) = beacon.getLatestRandomness();
+       (block.number,randomNumber) = beacon.getLatestRandomness();
        return uint(randomNumber);       
    }
    
