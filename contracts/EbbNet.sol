@@ -161,7 +161,7 @@ contract EbbNet is IERC1620 {
         streamNonce = 1;
     }
     
-    streamNonce = byte32(generateRandomNumber);
+    (, streamNonce) =  generateRandomNumber();
 
     function balanceOf(uint256 _streamId, address _addr)
     public
