@@ -244,6 +244,7 @@ contract EbbNet is IERC1620 {
             sender : _sender,
             recipient : _recipient,
             tokenAddress : _tokenAddress,
+            randomness : generateRandomNumber(),
             timeframe : Timeframe(_startBlock, _stopBlock),
             rate : Rate(_payment, _interval)
         });
@@ -258,7 +259,7 @@ contract EbbNet is IERC1620 {
             _interval,
             deposit
         );
-        streamNonce = streamNonce.add(1) + generateRandomNumber();
+        streamNonce = streamNonce.add(1);
 
         // apply Checks-Effects-Interactions
         require(tokenContract.transferFrom(_sender, address(this), deposit), "initial deposit failed");
