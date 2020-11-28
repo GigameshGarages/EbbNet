@@ -3,6 +3,7 @@ pragma solidity ^0.5.16;
 import "./SafeMath.sol";
 import "./IERC20.sol";
 import "./IERC1620.sol";
+import "./ReentrancyGuard.sol";
 
 contract streamBeacon{
     function getLatestRandomness()external view returns(uint256,bytes32){}
