@@ -15,10 +15,10 @@ async function readOnChainData() {
   const defaultProvider = getDefaultProvider();
   // Create an instance of an ethers.js Contract
   // Read more about ethers.js on https://docs.ethers.io/v5/api/contract/contract/
-  const ceaErc20 = new Contract(addresses.ebbnet, abis.ebbnet, defaultProvider);
+  const ebbnetinfo = new Contract(addresses.ebbnet, abis.ebbnet, defaultProvider);
   // A pre-defined address that owns some CEAERC20 tokens
-  const tokenBalance = await ceaErc20.balanceOf("0x2d2fc8e3b9f7147Aac6FBb0Fd9084eD95A72612D");
-  console.log({ tokenBalance: tokenBalance.toString() });
+  const ebbnetvalue = await ebbnetinfo.balanceOf("0x2d2fc8e3b9f7147Aac6FBb0Fd9084eD95A72612D");
+  console.log({ EbbNet value: ebbnetvalue.toString() });
 }
 
 function WalletButton({ provider, loadWeb3Modal }) {
