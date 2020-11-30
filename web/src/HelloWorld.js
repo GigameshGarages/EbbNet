@@ -649,7 +649,7 @@ const web3Provider = new Web3.providers.HttpProvider(
   "https://mainnet.infura.io/v3/dc7b8f76612a430db6356b86a49a35f3"
 );
 */
-const web3 = new Web3.providers.HttpProvider("https://rpc.maticvigil.com/");
+const web3 = new Web3.providers.HttpProvider("https://rpc-mainnet.maticvigil.com/");
 try {
   const contract = new web3.eth.Contract(contractAbi, contractAddress);
   this.setState({ contract });
