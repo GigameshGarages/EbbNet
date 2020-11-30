@@ -60,7 +60,8 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
-
+  plugins: ['oneclick']
+  
   networks: {
     development: {
       host: 'localhost',
