@@ -1,16 +1,18 @@
 pragma solidity ^0.5.16;
 
 import "./SafeMath.sol";
+import "./Ownable.sol";
 import "./IERC20.sol";
 import "./IERC1620.sol";
 import "./ReentrancyGuard.sol";
+import "./Initializable.sol";
 
-contract streamBeacon{
+contract streamBeacon {
     function getLatestRandomness()external view returns(uint256,bytes32){}
     
 }
 
-contract EbbNet is IERC1620, ReentrancyGuard {
+contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     
     address public BeaconContractAddress = 0x79474439753C7c70011C3b00e06e559378bAD040;
@@ -27,14 +29,11 @@ contract EbbNet is IERC1620, ReentrancyGuard {
         return randomNumber;
        
     }
-   
-    
 
     /**
      * Types
      */
-    
-     
+      
     struct Timeframe {
         uint256 start;
         uint256 stop;
@@ -159,6 +158,9 @@ contract EbbNet is IERC1620, ReentrancyGuard {
         streamNonce = 1;
     }
     
+    function initialize() public initializer {
+        streamNonce = 1;
+    }
    
 
     function balanceOf(uint256 _streamId, address _addr)
