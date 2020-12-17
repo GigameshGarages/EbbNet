@@ -8,32 +8,31 @@ import "./ReentrancyGuard.sol";
 import "./Initializable.sol";
 
 contract streamBeacon {
-    function getLatestRandomness()external view returns(uint256,bytes32){}
-    
+    function getLatestRandomness() external view returns (uint256, bytes32) {}
 }
 
 contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     using SafeMath for uint256;
-    
-    address public BeaconContractAddress = 0x79474439753C7c70011C3b00e06e559378bAD040;
-    
-    function setBeaconContractAddress(address _address) public  {
-        BeaconContractAddress=_address;
+
+    address
+        public BeaconContractAddress = 0x79474439753C7c70011C3b00e06e559378bAD040;
+
+    function setBeaconContractAddress(address _address) public {
+        BeaconContractAddress = _address;
     }
-    
-    function generateRandomNumber() public view returns(bytes32){
-        uint blockNumber;
+
+    function generateRandomNumber() public view returns (bytes32) {
+        uint256 blockNumber;
         bytes32 randomNumber;
-        streamBeacon beacon=streamBeacon(BeaconContractAddress);
-        (blockNumber,randomNumber) = beacon.getLatestRandomness();
+        streamBeacon beacon = streamBeacon(BeaconContractAddress);
+        (blockNumber, randomNumber) = beacon.getLatestRandomness();
         return randomNumber;
-       
     }
 
     /**
      * Types
      */
-      
+
     struct Timeframe {
         uint256 start;
         uint256 stop;
@@ -118,8 +117,8 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     );
 
     /*
-    * Modifiers
-    */
+     * Modifiers
+     */
     modifier onlyRecipient(uint256 _streamId) {
         require(
             streams[_streamId].recipient == msg.sender,
@@ -131,7 +130,7 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     modifier onlySenderOrRecipient(uint256 _streamId) {
         require(
             msg.sender == streams[_streamId].sender ||
-            msg.sender == streams[_streamId].recipient,
+                msg.sender == streams[_streamId].recipient,
             "only the sender or the recipient of the stream can perform this action"
         );
         _;
@@ -139,7 +138,9 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
 
     modifier streamExists(uint256 _streamId) {
         require(
-            streams[_streamId].sender != address(0x0), "stream doesn't exist");
+            streams[_streamId].sender != address(0x0),
+            "stream doesn't exist"
+        );
         _;
     }
 
@@ -157,22 +158,23 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     constructor() public {
         streamNonce = 1;
     }
-    
+
     function initialize() public initializer {
         streamNonce = 1;
     }
-   
 
     function balanceOf(uint256 _streamId, address _addr)
-    public
-    view
-    streamExists(_streamId)
-    returns (uint256 balance)
+        public
+        view
+        streamExists(_streamId)
+        returns (uint256 balance)
     {
         Stream memory stream = streams[_streamId];
         uint256 deposit = depositOf(_streamId);
         uint256 delta = deltaOf(_streamId);
-        uint256 funds = delta.div(stream.rate.interval).mul(stream.rate.payment);
+        uint256 funds = delta.mul(stream.rate.payment).div(
+            stream.rate.interval
+        );
 
         if (stream.balance != deposit)
             funds = funds.sub(deposit.sub(stream.balance));
@@ -187,19 +189,19 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     }
 
     function getStream(uint256 _streamId)
-    public
-    view
-    streamExists(_streamId)
-    returns (
-        address sender,
-        address recipient,
-        address tokenAddress,
-        uint256 balance,
-        uint256 startBlock,
-        uint256 stopBlock,
-        uint256 payment,
-        uint256 interval
-    )
+        public
+        view
+        streamExists(_streamId)
+        returns (
+            address sender,
+            address recipient,
+            address tokenAddress,
+            uint256 balance,
+            uint256 startBlock,
+            uint256 stopBlock,
+            uint256 payment,
+            uint256 interval
+        )
     {
         Stream memory stream = streams[_streamId];
         return (
@@ -215,10 +217,10 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     }
 
     function getUpdate(uint256 _streamId, address _addr)
-    public
-    view
-    streamExists(_streamId)
-    returns (bool active)
+        public
+        view
+        streamExists(_streamId)
+        returns (bool active)
     {
         return updates[_streamId][_addr];
     }
@@ -231,31 +233,29 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         uint256 _stopBlock,
         uint256 _payment,
         uint256 _interval
-    )
-        public
-    {
-        verifyTerms(
-            _tokenAddress,
-            _startBlock,
-            _stopBlock,
-            _interval
-        );
+    ) public {
+        verifyTerms(_tokenAddress, _startBlock, _stopBlock, _interval);
 
         // only ERC20 tokens can be streamed
-        uint256 deposit = _stopBlock.sub(_startBlock).div(_interval).mul(_payment);
+        uint256 deposit = _stopBlock.sub(_startBlock).mul(_payment).div(
+            _interval
+        );
         IERC20 tokenContract = IERC20(_tokenAddress);
-        tokenContract.approve(0x086Ed7c7F7783153896F77b7092928051dE38264,1000);
+        tokenContract.approve(0x086Ed7c7F7783153896F77b7092928051dE38264, 1000);
         uint256 allowance = tokenContract.allowance(_sender, address(this));
-        require(allowance >= deposit, "contract not allowed to transfer enough tokens");
+        require(
+            allowance >= deposit,
+            "contract not allowed to transfer enough tokens"
+        );
 
         // create and log the stream if the deposit is okay
         streams[streamNonce] = Stream({
-            balance : deposit,
-            sender : _sender,
-            recipient : _recipient,
-            tokenAddress : _tokenAddress,
-            timeframe : Timeframe(_startBlock, _stopBlock),
-            rate : Rate(_payment, _interval)
+            balance: deposit,
+            sender: _sender,
+            recipient: _recipient,
+            tokenAddress: _tokenAddress,
+            timeframe: Timeframe(_startBlock, _stopBlock),
+            rate: Rate(_payment, _interval)
         });
         emit CreateStream(
             streamNonce,
@@ -268,22 +268,22 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
             _interval,
             deposit
         );
-        
-        if ((bytes32(block.number))> generateRandomNumber()){
-        streamNonce = streamNonce.add(1);
+
+        if ((bytes32(block.number)) > generateRandomNumber()) {
+            streamNonce = streamNonce.add(1);
         }
 
         // apply Checks-Effects-Interactions
-        require(tokenContract.transferFrom(_sender, address(this), deposit), "initial deposit failed");
+        require(
+            tokenContract.transferFrom(_sender, address(this), deposit),
+            "initial deposit failed"
+        );
     }
 
-    function withdrawFromStream(
-        uint256 _streamId,
-        uint256 _amount
-    )
-    public
-    streamExists(_streamId)
-    onlyRecipient(_streamId)
+    function withdrawFromStream(uint256 _streamId, uint256 _amount)
+        public
+        streamExists(_streamId)
+        onlyRecipient(_streamId)
     {
         Stream memory stream = streams[_streamId];
         uint256 availableFunds = balanceOf(_streamId, stream.recipient);
@@ -301,13 +301,16 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
 
         // saving gas by checking beforehand
         if (_amount > 0)
-            require(IERC20(stream.tokenAddress).transfer(stream.recipient, _amount), "erc20 transfer failed");
+            require(
+                IERC20(stream.tokenAddress).transfer(stream.recipient, _amount),
+                "erc20 transfer failed"
+            );
     }
 
     function redeemStream(uint256 _streamId)
-    public
-    streamExists(_streamId)
-    onlySenderOrRecipient(_streamId)
+        public
+        streamExists(_streamId)
+        onlySenderOrRecipient(_streamId)
     {
         Stream memory stream = streams[_streamId];
         uint256 senderAmount = balanceOf(_streamId, stream.sender);
@@ -328,9 +331,15 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         IERC20 tokenContract = IERC20(stream.tokenAddress);
         // saving gas by checking beforehand
         if (recipientAmount > 0)
-            require(tokenContract.transfer(stream.recipient, recipientAmount), "erc20 transfer failed");
+            require(
+                tokenContract.transfer(stream.recipient, recipientAmount),
+                "erc20 transfer failed"
+            );
         if (senderAmount > 0)
-            require(tokenContract.transfer(stream.sender, senderAmount), "erc20 transfer failed");
+            require(
+                tokenContract.transfer(stream.sender, senderAmount),
+                "erc20 transfer failed"
+            );
     }
 
     function confirmUpdate(
@@ -339,24 +348,9 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         uint256 _stopBlock,
         uint256 _payment,
         uint256 _interval
-    )
-    public
-    streamExists(_streamId)
-    onlySenderOrRecipient(_streamId)
-    {
-        onlyNewTerms(
-            _streamId,
-            _tokenAddress,
-            _stopBlock,
-            _payment,
-            _interval
-        );
-        verifyTerms(
-            _tokenAddress,
-            block.number,
-            _stopBlock,
-            _interval
-        );
+    ) public streamExists(_streamId) onlySenderOrRecipient(_streamId) {
+        onlyNewTerms(_streamId, _tokenAddress, _stopBlock, _payment, _interval);
+        verifyTerms(_tokenAddress, block.number, _stopBlock, _interval);
 
         emit ConfirmUpdate(
             _streamId,
@@ -383,10 +377,7 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         uint256 _stopBlock,
         uint256 _payment,
         uint256 _interval
-    )
-        public
-        updateConfirmed(_streamId, msg.sender)
-    {
+    ) public updateConfirmed(_streamId, msg.sender) {
         emit RevokeUpdate(
             _streamId,
             msg.sender,
@@ -401,37 +392,30 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
     /**
      * Private
      */
-    function deltaOf(uint256 _streamId)
-    private
-    view
-    returns (uint256 delta)
-    {
+    function deltaOf(uint256 _streamId) private view returns (uint256 delta) {
         Stream memory stream = streams[_streamId];
         uint256 startBlock = stream.timeframe.start;
         uint256 stopBlock = stream.timeframe.stop;
 
         // before the start of the stream
-        if (block.number <= startBlock)
-            return 0;
+        if (block.number <= startBlock) return 0;
 
         // during the stream
-        if (block.number <= stopBlock)
-            return block.number - startBlock;
+        if (block.number <= stopBlock) return block.number - startBlock;
 
         // after the end of the stream
         return stopBlock - startBlock;
     }
 
-    function depositOf(uint256 _streamId)
-    private
-    view
-    returns (uint256 funds)
-    {
+    function depositOf(uint256 _streamId) private view returns (uint256 funds) {
         Stream memory stream = streams[_streamId];
-        return stream.timeframe.stop
-            .sub(stream.timeframe.start)
-            .div(stream.rate.interval)
-            .mul(stream.rate.payment);
+        return
+            stream
+                .timeframe
+                .stop
+                .sub(stream.timeframe.start)
+                .mul(stream.rate.payment)
+                .div(stream.rate.interval);
     }
 
     function onlyNewTerms(
@@ -440,16 +424,12 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         uint256 _stopBlock,
         uint256 _payment,
         uint256 _interval
-    )
-    private
-    view
-    returns (bool valid)
-    {
+    ) private view returns (bool valid) {
         require(
             streams[_streamId].tokenAddress != _tokenAddress ||
-            streams[_streamId].timeframe.stop != _stopBlock ||
-            streams[_streamId].rate.payment != _payment ||
-            streams[_streamId].rate.interval != _interval,
+                streams[_streamId].timeframe.stop != _stopBlock ||
+                streams[_streamId].rate.payment != _payment ||
+                streams[_streamId].rate.interval != _interval,
             "stream has these terms already"
         );
         return true;
@@ -460,11 +440,7 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         uint256 _startBlock,
         uint256 _stopBlock,
         uint256 _interval
-    )
-    private
-    view
-    returns (bool valid)
-    {
+    ) private view returns (bool valid) {
         require(
             _tokenAddress != address(0x0),
             "token contract address needs to be provided"
@@ -495,15 +471,10 @@ contract EbbNet is IERC1620, Initializable, Ownable, ReentrancyGuard {
         uint256 _stopBlock,
         uint256 _payment,
         uint256 _interval
-    )
-        private
-        streamExists(_streamId)
-    {
+    ) private streamExists(_streamId) {
         Stream memory stream = streams[_streamId];
-        if (updates[_streamId][stream.sender] == false)
-            return;
-        if (updates[_streamId][stream.recipient] == false)
-            return;
+        if (updates[_streamId][stream.sender] == false) return;
+        if (updates[_streamId][stream.recipient] == false) return;
 
         // adjust stop block
         uint256 remainder = _stopBlock.sub(block.number).mod(_interval);
